@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Список заметок</title>
+	<link rel="stylesheet" href="theme.css" />
+</head>
+
+<body>
+
+	<div class="container" id="app">
+		<div class="card">
+			<!-- чтобы работать со стилями нам нужно забайндить атрибут style -->
+			<h1 v-bind:style="{
+				color: inputValue.length >= 1 ? 'aqua' : 'white'
+			}">{{ title }}</h1>
+			<div class="form-control">
+				<!-- we use v-on:keypress.enter="addNewNote" to add new item to list on click enter -->
+				<!-- v-bind: можно сократить до : , а v-on: до @ -->
+				<!-- 017. удаляем прослушку inputи и value и добавляем v-model со значением inputValue -->
+				<input 
+				type="text"
+				:placeholder="placeholderString"
+				v-model="inputValue"
+				@keypress.enter="addNewNote"
+				>
+				<!-- v-on:keypress="inputKeyPress" -->
+			</div>
+			<!-- add method -->
+			<button class="btn primary" @click="addNewNote">Добавить</button>
+			<hr>
+			<!-- 011. add directive v-if to check if this massive isn't empty -->
+			<ul class="list" v-if="notes.length !== 0">
+				<!-- переменную myNote группируем в скобки и создаем радом с ней переменную, которая будет отвечать за индекс -->
+				<li class="list-item" v-for="(myNote, idx) in notes">
+					<!-- 13. add method to template using brackets -->
+					<!-- {{ idx + 1. }}. {{ toUpperCase(myNote) }} -->
+					<!-- 019. Add cover span to group this code and add binded class-->
+					<span>{{ idx + 1. }}. {{ myNote }}</span>
+					<!-- 019. можно ещё сделать так для классов: -->
+					<!-- <span :class="{
+						'primary': true,
+						'bold': note.length > 5
+					}">{{ idx + 1. }}. {{ myNote }}</span> -->
+					<!-- 019. 3rd way работы с классами -->
+					<!-- <span :class="['bold', {'primary': myNote.length > 5}]">{{ idx + 1. }}. {{ myNote }}</span> -->
+					<!-- создаем кнопку и вешаем на неё событие -->
+					<!-- $event - чтобы получить нативный event браузера, добавляем через запятую в скобки после idx -->
+					<button class="btn danger" @click="removeNote(idx)">удалить</button>
+				</li>
+				<!-- 15й урок -->
+				<hr>
+				<!-- computed свойства мы не вызываем, они являются геттерами и сеттерами, поэтому вызываются без скобок -->
+				<strong>Общее количество заметок: {{ notes.length }}</strong> <!-- | Удвоенное: {{ doubleCountComputed }} -->
+			</ul>
+			<!-- 011. else show this tag (v-if="notes.length === 0") -->
+			<div v-else>{{ absenceMessage }}</div>
+		</div>
+	</div>
+
+	<script src="https://unpkg.com/vue@next"></script>
+	<script src="app.js"></script>
+</body>
+
+</html>
